@@ -1,7 +1,7 @@
 {
-  "name": "bro-start-nano",
-  "version": "0.0.1",
-  "description": "Tiny starterkit for one-page experiences.",
+  "name": "bro-tube",
+  "version": "2.0.0",
+  "description": "Muscles for your Youtube",
   "main": "src/index.js",
   "scripts": {
     "dev": "webpack-dev-server --progress --colors --inline --hot",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brocessing/bro-tube.git"
+    "url": "git+https://github.com/brocessing/bro-start-nano"
   },
   "author": "Brocessing",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/brocessing/bro-tube/issues"
+    "url": "https://github.com/brocessing/bro-start-nano/issues"
   },
-  "homepage": "https://github.com/brocessing/bro-tube#readme",
+  "homepage": "https://github.com/brocessing/bro-start-nano#readme",
   "devDependencies": {
     "autoprefixer-stylus": "^0.9.3",
     "babel-core": "^6.9.1",
