@@ -9,9 +9,9 @@ Tiny starter kit for one-page experiences
 * Stylus + nib
 
 ### Installation
-You can fork it and make your own boilerplate, or just copy the repo without the .git folder :
 ```
 svn export https://github.com/brocessing/bro-start-nano/trunk bro-start-nano
+npm install
 ```
 
 ### Usage
