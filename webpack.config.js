@@ -49,7 +49,7 @@ module.exports = {
       {
           test: /\.styl?$/,
           exclude: ['/node_modules/'],
-          loader: (prod) ? ExtractTextPlugin.extract('style', 'css?-url!stylus') : 'style!css?-url!postcss!stylus'
+          loader: (prod) ? ExtractTextPlugin.extract('style', 'css?-url!stylus') : 'style!css?-url!stylus'
       },
       {
         test: /\.js?$/,
