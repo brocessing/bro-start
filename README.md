@@ -4,9 +4,9 @@ bro-start-nano
 Tiny starter kit for one-page experiences
 
 ### Features
-* Webpack + Webpack-dev-server
-* ES6 transpilation with Babel
-* Stylus + nib
+* [Webpack](https://github.com/webpack/webpack) + [Webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* [ES6](https://github.com/lukehoban/es6features#readme) transpilation with [Babel](https://github.com/babel/babel)
+* [Stylus](https://github.com/stylus/stylus/) + [nib](https://github.com/tj/nib)
 
 ### Installation
 ```
