@@ -1,44 +1,50 @@
 const path               = require('path');
 const webpack            = require('webpack');
-const HtmlWebpackPlugin  = require('html-webpack-plugin');
 const CopyWebpackPlugin  = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin  = require('extract-text-webpack-plugin');
 
-const srcPath   = path.join(__dirname, 'src');
-const buildPath = path.join(__dirname, 'build');
-const prod      = (process.env.NODE_ENV === 'production');
+const isProduction = (process.env.NODE_ENV === 'production');
+const paths = {
+  base: isProduction ? './' : '/',
+  src: path.resolve('src'),
+  build: isProduction ? path.resolve('build') : path.resolve('src/static'),
+  static: path.resolve('src/static')
+}
 
-const basePath  = prod ? './' : '/';
+const CSSLoaders = isProduction ?
+                    ExtractTextPlugin.extract('style', 'css?-url!stylus')
+                    : 'style!css?-url!stylus'
+
+const devPlugins = isProduction ? [] : [
+  new webpack.HotModuleReplacementPlugin(),
+  new webpack.NoErrorsPlugin()
+]
+
+const devEntries = isProduction ? [] : [
+  'webpack-hot-middleware/client?reload=true'
+];
 
 module.exports = {
-  entry: [
-    path.join(srcPath, 'index.js'),
-    path.join(srcPath, 'index.styl')
-  ],
+  entry: devEntries.concat([
+    path.join(paths.src, 'index.js'),
+    path.join(paths.src, 'index.styl')
+  ]),
   output: {
-    path: path.join(buildPath, 'dev'),
-    publicPath: basePath,
-    filename: 'bundle-[hash].js',
+    path: paths.build,
+    publicPath: paths.base,
+    filename: 'bundle.js',
     chunkFilename: 'chunk-[id]-[hash].js'
-  },
-  node: {
-    fs: "empty"
   },
   resolve: {
     extensions: ['', '.js', '.json', '.config.js'],
     alias: {
-      'configs': path.join(srcPath, 'configs'),
-      'libs': path.join(srcPath, 'libs'),
-      'utils': path.join(srcPath, 'libs/utils'),
+      'configs': path.join(paths.src, 'configs'),
+      'libs': path.join(paths.src, 'libs'),
+      'utils': path.join(paths.src, 'libs/utils'),
     }
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      env: (prod) ? 'production' : 'development'
-    })
-  ],
+  plugins: devPlugins.concat([]),
   module: {
     loaders: [
       {
@@ -47,14 +53,14 @@ module.exports = {
         loader: 'json'
       },
       {
-          test: /\.styl?$/,
-          exclude: ['/node_modules/'],
-          loader: (prod) ? ExtractTextPlugin.extract('style', 'css?-url!stylus') : 'style!css?-url!stylus'
+        test: /\.styl?$/,
+        exclude: ['/node_modules/'],
+        loader: CSSLoaders
       },
       {
         test: /\.js?$/,
         exclude: ['/node_modules/'],
-        include: srcPath,
+        include: paths.src,
         loader: 'babel',
         query: {
           presets: ['es2015'],
@@ -65,8 +71,8 @@ module.exports = {
     ]
   },
   devServer: {
-    contentBase: path.join(srcPath, 'static'),
-    outputPath: path.join(buildPath, 'dev'),
+    contentBase: paths.static,
+    outputPath: path.join(paths.build, 'dev'),
     historyApiFallback: true,
     noInfo: true
   },
@@ -81,8 +87,7 @@ module.exports = {
   debug: true
 };
 
-if (prod) {
-  module.exports.output.path = buildPath;
+if (isProduction) {
   module.exports.devtool = '';
   module.exports.debug = false;
   module.exports.plugins = (module.exports.plugins || []).concat([
@@ -95,14 +100,14 @@ if (prod) {
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new CopyWebpackPlugin(
-      [{
-        from: path.join(srcPath, 'static')
-      }],
+      [{ from: path.join(paths.src, 'static'), to: paths.build }],
       {
         ignore: ['.DS_Store', '.gitkeep']
       }
     ),
-    new ExtractTextPlugin('bundle-[hash].css', { allChunks: true }),
+    new ExtractTextPlugin('bundle.css', { allChunks: true }),
     new CleanWebpackPlugin(['build'], { root: __dirname, dry: false })
   ]);
 }
+
+module.exports.paths = paths;
