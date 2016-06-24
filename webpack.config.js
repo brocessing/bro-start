@@ -3,6 +3,8 @@ const webpack            = require('webpack');
 const CopyWebpackPlugin  = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin  = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin  = require('html-webpack-plugin');
+const pages              = require('./src/pages.config');
 
 const isProduction = (process.env.NODE_ENV === 'production');
 const paths = {
@@ -12,9 +14,25 @@ const paths = {
   static: path.resolve('src/static')
 }
 
+const CSSExtract = new ExtractTextPlugin('bundle-[hash].css', { allChunks: true });
 const CSSLoaders = isProduction ?
-                    ExtractTextPlugin.extract('style', 'css?-url!stylus')
-                    : 'style!css?-url!stylus'
+                    CSSExtract.extract('style', 'css?-url!stylus')
+                    : 'style!css?-url!stylus';
+
+
+const pagesPlugins = pages
+  .filter(page => page.filename && page.template)
+  .map((page) => {
+    const config = Object.assign(page, {
+      cache: false,
+      minify: isProduction ?
+        {
+          collapseWhitespace: true,
+          removeComments: true,
+        } : false
+    });
+    return new HtmlWebpackPlugin(config);
+  });
 
 const devPlugins = isProduction ? [] : [
   new webpack.HotModuleReplacementPlugin(),
@@ -33,7 +51,7 @@ module.exports = {
   output: {
     path: paths.build,
     publicPath: paths.base,
-    filename: 'bundle.js',
+    filename: 'bundle-[hash].js',
     chunkFilename: 'chunk-[id]-[hash].js'
   },
   resolve: {
@@ -44,7 +62,7 @@ module.exports = {
       'utils': path.join(paths.src, 'libs/utils'),
     }
   },
-  plugins: devPlugins.concat([]),
+  plugins: devPlugins.concat(pagesPlugins, []),
   module: {
     loaders: [
       {
@@ -79,9 +97,7 @@ module.exports = {
   stylus: {
     use: [
       require('autoprefixer-stylus'),
-      require('nib')()
     ],
-    import: ['~nib/lib/nib/index.styl']
   },
   devtool: '#eval-source-map',
   debug: true
@@ -105,7 +121,7 @@ if (isProduction) {
         ignore: ['.DS_Store', '.gitkeep']
       }
     ),
-    new ExtractTextPlugin('bundle.css', { allChunks: true }),
+    CSSExtract,
     new CleanWebpackPlugin(['build'], { root: __dirname, dry: false })
   ]);
 }

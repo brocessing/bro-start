@@ -16,7 +16,10 @@ browserSync.init({
   notify: false,
   tunnel: localtunnelDomain,
   proxy: `${server.ip}:${server.port}`,
-  files: path.join(config.paths.static,'**/*'),
+  files: [
+    path.join(config.paths.static,'**/*'),
+    path.join(config.paths.src,'views/**/*')
+  ],
   middleware: [
     webpackDevMiddleware(compiler, {
       contentBase: config.paths.static,

@@ -23,6 +23,9 @@ Run a BrowserSync proxy with Hot Module Replacement on localhost:3001
 - `npm run build`
 Production ready build
 
+- `npm run build-analyze`
+Production ready build and display the size of all used modules with [webpack-bundle-size-analyzer](https://github.com/robertknight/webpack-bundle-size-analyzer)
+
 - `npm run imagemin`
 Compress images in src/static/images/
 
