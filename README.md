@@ -33,6 +33,7 @@ Compress images in src/static/images/
 
 - `npm run bundle-analyzer`
 Display the size of all used modules with [webpack-bundle-size-analyzer](https://github.com/robertknight/webpack-bundle-size-analyzer)
+
 This command is for optimization only. Despite making files in your build folder,
 don't use it for production ready builds.
 
