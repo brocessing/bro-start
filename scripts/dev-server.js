@@ -1,6 +1,5 @@
 const fs                   = require('fs');
 const url                  = require('url');
-const minifier             = require('html-minifier');
 const path                 = require('path');
 const webpack              = require('webpack');
 const config               = require('../webpack.config');

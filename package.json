@@ -33,7 +33,6 @@
     "css-loader": "^0.23.1",
     "express": "^4.14.0",
     "extract-text-webpack-plugin": "^1.0.1",
-    "html-minifier": "^2.1.6",
     "html-webpack-plugin": "^2.21.0",
     "imagemin-cli": "^3.0.0",
     "imagemin-pngquant": "^5.0.0",
