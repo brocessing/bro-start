@@ -3,7 +3,6 @@ const webpack            = require('webpack');
 const CopyWebpackPlugin  = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin  = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin  = require('html-webpack-plugin');
 const pages              = require('./src/pages.config');
 
 const isProduction = (process.env.NODE_ENV === 'production');
@@ -19,20 +18,6 @@ const CSSLoaders = isProduction ?
                     CSSExtract.extract('style', 'css?-url!stylus')
                     : 'style!css?-url!stylus';
 
-
-const pagesPlugins = pages
-  .filter(page => page.filename && page.template)
-  .map((page) => {
-    const config = Object.assign(page, {
-      cache: false,
-      minify: isProduction ?
-        {
-          collapseWhitespace: true,
-          removeComments: true,
-        } : false
-    });
-    return new HtmlWebpackPlugin(config);
-  });
 
 const devPlugins = isProduction ? [] : [
   new webpack.HotModuleReplacementPlugin(),
@@ -62,7 +47,7 @@ module.exports = {
       'utils': path.join(paths.src, 'libs/utils'),
     }
   },
-  plugins: devPlugins.concat(pagesPlugins, []),
+  plugins: devPlugins.concat([]),
   module: {
     loaders: [
       {

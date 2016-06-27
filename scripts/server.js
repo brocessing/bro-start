@@ -10,18 +10,13 @@ const contentPath  = isProduction ?
                       path.resolve('src/static')
 
 //serve static files — webpack handle js & css in dev env
-app.use(express.static(contentPath, { index: 'index.html' }));
+app.use(express.static(contentPath));
 
 /*
 
   You can put your server Routes here
 
  */
-
-//historyApiFallback for SPA, if needed
-app.get('*', (req, res) => {
-  res.sendFile(path.join(contentPath, 'index.html'));
-});
 
 app.listen(PORT, (err) => { if (err) console.log(err); });
 

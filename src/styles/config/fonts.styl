@@ -1,9 +1,11 @@
-webfont('YoungSerif', 'YoungSerif-Regular')
+webfont('WorkSans', 'WorkSans-Regular')
 
 font_main()
-  font-family 'YoungSerif', 'Times', serif
+  font-family 'WorkSans', 'Arial', sans-serif
   color colors_text
   font-weight 800
-  font-size 40px
+  font-size 60px
+  +media(bigdesktop)
+    font-size 80px
   +media(mobile)
-    font-size 20px
+    font-size 40px

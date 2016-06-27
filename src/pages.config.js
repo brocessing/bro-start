@@ -1,32 +1,22 @@
 /**
- * Put the list of your pages in the pages array
+ * data.compiler will be appended automatically
+ * to the data object of your pages.
  *
- * template: input path of the page (relative to the root of your project)
- * filename: output path of the page (relative to the root of the build folder)
- * filename and template are mandatory fields.
- *
- * you can render variable in your template via ejs template tags :
- * <%= htmlWebpackPlugin.options.title %> will render the title field
- *
- * you can use include(path) to add html files inside the template.
+ * {{compiler.hash}} -> Get hash from Webpack
+ * {{#compiler.isProduction}}
+ *   Display this content only in Production builds
+ * {{/compiler.isProduction}}
  */
 
-const fs = require('fs');
-const includes = {};
-
-function include(path) {
-  return includes[path] || (includes[path] = fs.readFileSync(path, 'utf8'));
-}
-
-const pages = [
-  {
-    template: 'src/views/template-main.html',
-    filename: 'index.html',
-    title: 'Bonjour',
-    description: 'This is the homepage',
-    content: include('src/views/content-index.html'),
-    pageClass: 'home'
+const pages = {
+  'index.html': {
+    template: 'home.mustache',
+    data: {
+      title: 'Bro-start-nano template',
+      description: 'Tiny starter kit for making cool websites',
+      pageClass: 'home'
+    }
   }
-];
+};
 
 module.exports = pages;

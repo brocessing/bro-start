@@ -1,0 +1,14 @@
+vertical-center(pos = relative)
+  position pos
+  top 50%
+  transform translateY(-50%)
+
+horizontal-center(pos = relative)
+  if pos = absolute
+    font-size 80px
+  if pos = relative
+    font-size 10px
+
+debug(col = red)
+  border 1px solid col
+  box-sizing border-box
