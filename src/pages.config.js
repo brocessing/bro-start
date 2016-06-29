@@ -8,6 +8,10 @@
  * {{/compiler.isProduction}}
  */
 
+const options = {
+  'cwd': `${__dirname}/templates`
+}
+
 const pages = {
   'index.html': {
     template: 'home.mustache',
