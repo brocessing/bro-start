@@ -28,7 +28,7 @@ Run a BrowserSync proxy with Hot Module Replacement on localhost:3001
 - `npm run build`
 Production ready build
 
-- `npm run doodle-create -- _<doodleName>_`
+- `npm run doodle-create -- <doodleName>`
 Create a new doodle in the doodles folder.
 
 - `npm run imagemin`
