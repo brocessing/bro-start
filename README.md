@@ -22,19 +22,29 @@ You can also [download stable releases](https://github.com/brocessing/bro-start-
 
 
 ### Usage
-```npm run dev````
+```
+npm run dev
+```
 Run a BrowserSync proxy with Hot Module Replacement on localhost:3001
 
-```npm run build```
+```
+npm run build
+```
 Production ready build
 
-```npm run doodle-create -- <doodleName>```
+```
+npm run doodle-create -- doodleName
+```
 Create a new doodle in the doodles folder.
 
-```npm run imagemin```
+```
+npm run imagemin
+```
 Compress images in src/static/images/
 
-```npm run bundle-analyzer```
+```
+npm run bundle-analyzer
+```
 Display the size of all used modules with [webpack-bundle-size-analyzer](https://github.com/robertknight/webpack-bundle-size-analyzer)
 
 This command is for optimization only. Despite making files in your build folder,
@@ -42,6 +52,7 @@ don't use it for production ready builds.
 
 ### To do
 - Add html-minifier to the production build script
+- Add `doodle-dev` and `doodle-build`
 
 ### License
 MIT.
