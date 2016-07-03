@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brocessing/bro-start-nano"
+    "url": "git+https://github.com/brocessing/bro-start"
   },
   "author": "Brocessing",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/brocessing/bro-start-nano/issues"
+    "url": "https://github.com/brocessing/bro-start/issues"
   },
-  "homepage": "https://github.com/brocessing/bro-start-nano#readme",
+  "homepage": "https://github.com/brocessing/bro-start#readme",
   "devDependencies": {
     "autoprefixer-stylus": "^0.9.3",
     "babel-core": "^6.9.1",

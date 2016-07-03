@@ -14,11 +14,11 @@ Tiny starter kit for making cool websites
 
 ### Installation
 ```
-svn export https://github.com/brocessing/bro-start-nano/trunk bro-start-nano
-cd bro-start-nano
+svn export https://github.com/brocessing/bro-start/trunk bro-start
+cd bro-start
 npm install
 ```
-You can also [download stable releases](https://github.com/brocessing/bro-start-nano/releases)
+You can also [download stable releases](https://github.com/brocessing/bro-start/releases)
 
 
 ### Usage
