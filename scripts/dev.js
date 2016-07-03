@@ -1,23 +1,22 @@
-const argv         = require('minimist')(process.argv.slice(2));
-const path         = require('path');
-const xtend        = require('xtend');
-const sh           = require('./utils/Shell');
-const createDoodle = require('./utils/createDoodle');
-const createBuild  = require('./utils/createBuild');
+const argv            = require('minimist')(process.argv.slice(2));
+const path            = require('path');
+const sh              = require('./utils/Shell');
+const createDoodle    = require('./utils/createDoodle');
+const createDevServer = require('./utils/createDevServer');
 
-function build(options) {
-  const build = createBuild(options);
-  build.run()
-    .catch((e) => sh.error(e));
+function serve(options) {
+  const server = createDevServer(options);
+  server.run();
 }
+
 
 if (!argv._ || !argv._[0]) {
 
   const options = {
     isDoodle: false,
-    isProduction: true
+    isProduction: false
   };
-  build(options);
+  serve(options);
 
 } else {
 
@@ -35,9 +34,10 @@ if (!argv._ || !argv._[0]) {
     .then(() => {
       const options = {
         isDoodle: true,
-        isProduction: true,
+        isProduction: false,
         paths: { cwd: doodle.cwd }
       };
-      build(options);
+      serve(options);
     });
+
 }

@@ -10,7 +10,7 @@ Tiny starter kit for making cool websites
 - [mustache](https://mustache.github.io/) with [mu](https://github.com/raycmorgan/Mu)
 - [BrowserSync](https://github.com/BrowserSync/browser-sync) + [localtunnel](https://github.com/localtunnel/localtunnel)
 - [imagemin-cli](https://github.com/imagemin/imagemin-cli) + [pngquant](https://github.com/imagemin/imagemin-pngquant)
-
+- 'Doodle mode' to quickly create prototypes or codepen-like stuff
 
 ### Installation
 ```
@@ -25,7 +25,7 @@ You can also [download stable releases](https://github.com/brocessing/bro-start-
 ```
 npm run dev
 ```
-Run a BrowserSync proxy with Hot Module Replacement on localhost:3001
+Run a BrowserSync server with Hot Module Replacement
 
 ```
 npm run build
@@ -42,17 +42,8 @@ npm run imagemin
 ```
 Compress images in src/static/images/
 
-```
-npm run bundle-analyzer
-```
-Display the size of all used modules with [webpack-bundle-size-analyzer](https://github.com/robertknight/webpack-bundle-size-analyzer)
-
-This command is for optimization only. Despite making files in your build folder,
-don't use it for production ready builds.
-
 ### To do
 - Add html-minifier to the production build script
-- Add `doodle-dev` and `doodle-build`
 
 ### License
 MIT.
