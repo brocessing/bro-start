@@ -22,25 +22,20 @@ You can also [download stable releases](https://github.com/brocessing/bro-start-
 
 
 ### Usage
-```
-npm run dev
-```
-Run a BrowserSync server with Hot Module Replacement
 
-```
-npm run build
-```
-Production ready build
+###### Main scripts
 
-```
-npm run doodle-create -- doodleName
-```
-Create a new doodle in the doodles folder.
+- `npm run dev` Run a BrowserSync server with Hot Module Replacement
+- `npm run build` Production ready build
+- `npm run imagemin` Compress images in src/static/images/
 
-```
-npm run imagemin
-```
-Compress images in src/static/images/
+###### Doodle-specific scripts
+
+- `npm run doodle -- doodleName` Create the doodle _doodleName_ in the doodles folder.
+- `npm run dev -- doodleName` Run a BrowserSync server for _doodleName_
+- `npm run build -- doodleName` Production ready build of _doodleName_
+
+
 
 ### To do
 - Add html-minifier to the production build script
