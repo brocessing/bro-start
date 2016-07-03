@@ -64,7 +64,7 @@ function createDevServer(options = {}) {
       tunnel: localtunnelDomain,
       minify: false,
       files: [
-        mu.root,
+        path.join(mu.root, '**/*.mustache'),
         path.join(config.options.paths.static, '**/*'),
         path.join(config.options.paths.src, 'pages.config.js'),
       ],

@@ -32,6 +32,7 @@ function createConfig(_options) {
                       CSSExtract.extract('style', 'css?-url!stylus')
                       : 'style!css?-url!stylus';
 
+  const specificLoaderIncludes = options.isDoodle ? options.paths.src : [];
 
   const specificPlugins = [];
   if (options.isProduction) {
@@ -98,7 +99,9 @@ function createConfig(_options) {
         },
         {
           test: /\.js?$/,
-          exclude: ['/node_modules/'],
+          include: [
+            path.resolve(defaultOptions.paths.cwd, 'src')
+          ].concat(specificLoaderIncludes),
           loader: 'babel',
           query: {
             presets: ['es2015'],
