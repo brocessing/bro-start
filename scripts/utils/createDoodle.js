@@ -3,10 +3,10 @@ const path = require('path');
 
 const createDoodle = (_name, _cwd) => {
 
-  const name = _name;
-  const cwd = path.resolve(_cwd, _name);
+  if (!_name) throw new Error('Invalid doodle name');
 
-  if (!name) throw new Error('Invalid doodle name');
+  const name = _name.toString();
+  const cwd = path.resolve(_cwd, name);
 
   const templates = {
     'index.js': '',
