@@ -1,5 +1,5 @@
 {
-  "name": "bro-start-nano",
+  "name": "bro-start",
   "version": "1.2.0",
   "description": "Tiny starter kit for making cool websites",
   "main": "src/index.js",
