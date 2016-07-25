@@ -1,4 +1,4 @@
-const fs                = require('fs');
+const fs                = require('fs-extra');
 const path              = require('path');
 const webpack           = require('webpack');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
@@ -22,12 +22,15 @@ function createBuild(options = {}) {
       };
       for (const k in pagesConfig.pages) {
         const page = pagesConfig.pages[k];
-        const fileStream = fs.createWriteStream(path.join(output,k));
-        const templateStream = mu.compileAndRender(page.template,
-          Object.assign({compiler: compilerData}, page.data));
-        templateStream.pipe(fileStream);
-        templateStream.on('error', (e) => reject(e));
-        fileStream.on('finish', () => resolve());
+        let filename = path.join(output,k);
+        fs.ensureDir(path.dirname(filename), function (err) {
+            const fileStream = fs.createWriteStream(filename);
+            const templateStream = mu.compileAndRender(page.template,
+            Object.assign({compiler: compilerData}, page.data));
+            templateStream.pipe(fileStream);
+            templateStream.on('error', (e) => reject(e));
+            fileStream.on('finish', () => resolve());
+        });
       }
     });
   }
