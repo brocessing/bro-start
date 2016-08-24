@@ -39,6 +39,7 @@ You can also [download stable releases](https://github.com/brocessing/bro-start/
 
 ### To do
 - Add html-minifier to the production build script
+- Add an efficient webfont generator
 
 ### License
 MIT.
