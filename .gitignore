@@ -1,12 +1,12 @@
-####### APP #########
-build
-build/**/*
-_test.js
+### Yarn ###
+yarn.lock
 
-####### NODE ########
+### App ###
+dist
+dist/**/*
+
+### Node ###
 .tmp
-.sass-cache
-bower_components
 # Logs
 logs
 *.log
@@ -29,7 +29,7 @@ build/Release
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules
 
-####### OSX ########
+### OSX ###
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -50,16 +50,3 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-
-####### SUBLIME TEXT ########
-# cache files for sublime text
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-# workspace files are user-specific
-*.sublime-workspace
-# project files should be checked into the repository, unless a significant
-# proportion of contributors will probably not be using SublimeText
-# *.sublime-project
-# sftp configuration file
-sftp-config.json
