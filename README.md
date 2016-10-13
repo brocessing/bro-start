@@ -1,3 +1,4 @@
+<br>
 <p align="center">
   <img src="cover.gif" width="125" alt="Chevalvert">
 </p>
@@ -45,3 +46,5 @@ _TODO_
 
 ### License
 MIT.
+
+<br><br>
