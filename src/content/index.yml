@@ -1,0 +1,12 @@
+# Template compiler infos
+layout: index
+
+# Metadatas
+title: My website
+description: Test for bro-start
+
+# Content
+message: |
+  Multiline test.
+  Is this working?
+  I hope so!

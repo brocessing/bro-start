@@ -1,0 +1,6 @@
+# Template compiler infos
+layout: index
+route: customRoute.html
+
+# Metadatas
+title: deep recursion and custom route test
