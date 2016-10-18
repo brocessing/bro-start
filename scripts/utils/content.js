@@ -61,10 +61,8 @@ function content (contentPath, safeLoad) {
               `↳  File: ${filePath}\n` +
               `↳  Error: Missing the layout property`)
           }
-
           file.layout = data.layout
           delete data.layout
-
           if (!data.route) {
             file.route = path.relative(contentPath, filePath)
               .slice(0, -4) + '.html'
@@ -72,7 +70,6 @@ function content (contentPath, safeLoad) {
             file.route = data.route
             delete data.route
           }
-
           file.data = data
           resolve([file])
         })
