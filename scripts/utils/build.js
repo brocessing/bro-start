@@ -1,10 +1,10 @@
 const fs = require('fs-extra')
 const path = require('path')
-const content = require('./content')
 
-const utils = {
-  content,
+const build = {
+  staticRender (compiler) {
 
+  },
   webpackCompile (compiler) {
     return new Promise((resolve, reject) => {
       compiler.run((err, stats) => {
@@ -13,13 +13,11 @@ const utils = {
       })
     })
   },
-
   removeFile (filePath) {
     return new Promise((resolve, reject) => {
       fs.remove(filePath, err => (err) ? reject(err) : resolve())
     })
   },
-
   cleanupDist (distPath) {
     let promises = []
     const reg = /^(bundle|hash)[-abcdef0-9]+\.(js|css)$/
@@ -29,7 +27,7 @@ const utils = {
         fs.readdir(distPath, (err, files) => {
           if (err) return reject(err)
           files.filter(e => e.match(reg))
-            .forEach(e => promises.push(utils.removeFile(path.join(distPath, e))))
+            .forEach(e => promises.push(build.removeFile(path.join(distPath, e))))
           Promise.all(promises).then(resolve).catch(reject)
         })
       })
@@ -37,4 +35,4 @@ const utils = {
   }
 }
 
-module.exports = utils
+module.exports = build

@@ -3,6 +3,7 @@ const baseConfig = require('./webpack.config.base.js')
 const merge = require('webpack-merge')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const prodConfig = {
   output: {
@@ -17,6 +18,15 @@ const prodConfig = {
       mangle: { screw_ie8: true }
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
+    new CopyWebpackPlugin(
+      [{
+        from: paths.static,
+        to: paths.dist
+      }],
+      {
+        ignore: ['.DS_Store', '.gitkeep']
+      }
+    ),
     new ExtractTextPlugin('bundle-[hash].css', { allChunks: true })
   ],
   module: {

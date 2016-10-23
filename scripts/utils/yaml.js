@@ -1,18 +1,37 @@
 const fs = require('fs-extra')
 const path = require('path')
+const _yaml = require('js-yaml')
+
 const util = require('util')
-const yaml = require('js-yaml')
+const cache = require('./cache')
 
-function content (contentPath, safeLoad) {
+function yaml (contentPath, safeLoad) {
   const api = {
-    load
+    loadAll,
+    loadPath
   }
 
-  function load () {
-    return yamlLoadDir(contentPath)
+  function loadPath (filePath) {
+    return new Promise((resolve, reject) => {
+      processPath(filePath)
+        .then((arr) => { arr[0] ? resolve(arr[0]) : reject() })
+        .catch(reject)
+    })
   }
 
-  function yamlLoadDir (dirPath) {
+  function loadAll () {
+    return new Promise((resolve, reject) => {
+      loadDir(contentPath)
+        .then((arr) => {
+          let contents = {}
+          arr.forEach((content) => { contents['/' + content.route] = content })
+          resolve(contents)
+        })
+        .catch(reject)
+    })
+  }
+
+  function loadDir (dirPath) {
     let p = []
     let processFiles = []
     return new Promise((resolve, reject) => {
@@ -20,7 +39,7 @@ function content (contentPath, safeLoad) {
         if (err) return reject(err)
         files.forEach((file) => {
           const filePath = path.join(dirPath, file)
-          const promise = yamlProcessFile(filePath)
+          const promise = processPath(filePath)
           p.push(promise)
           promise.then((res) => {
             if (res) processFiles = processFiles.concat(res)
@@ -33,15 +52,15 @@ function content (contentPath, safeLoad) {
     })
   }
 
-  function yamlProcessFile (filePath) {
+  function processPath (filePath) {
     return new Promise((resolve, reject) => {
       fs.stat(filePath, (err, stats) => {
         if (err) {
           return reject(err)
         } else if (stats.isDirectory()) {
-          return yamlLoadDir(filePath).then(resolve).catch(reject)
+          return loadDir(filePath).then(resolve).catch(reject)
         } else if (stats.isFile() && path.extname(filePath) === '.yml') {
-          return yamlProcessContent(filePath, stats).then(resolve).catch(reject)
+          return processFile(filePath, stats).then(resolve).catch(reject)
         } else {
           return resolve()
         }
@@ -49,12 +68,12 @@ function content (contentPath, safeLoad) {
     })
   }
 
-  function yamlProcessContent (filePath, stats) {
+  function processFile (filePath, stats) {
     return new Promise((resolve, reject) => {
       let file = {}
-      file.mtime = util.inspect(stats.mtime)
+      cache.set(filePath, new Date(util.inspect(stats.mtime)))
       file.path = filePath
-      yamlLoadFile(filePath)
+      loadFile(filePath)
         .then((data) => {
           if (!data.layout) {
             return reject(`💀  Error with a YAML file\n` +
@@ -77,12 +96,12 @@ function content (contentPath, safeLoad) {
     })
   }
 
-  function yamlLoadFile (filePath) {
+  function loadFile (filePath) {
     return new Promise((resolve, reject) => {
       fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) return reject(err)
         try {
-          const json = safeLoad ? yaml.safeLoad(data) : yaml.load(data)
+          const json = safeLoad ? _yaml.safeLoad(data) : _yaml.load(data)
           resolve(json)
         } catch (err) {
           reject(`💀  Error with the YAML Compiler\n` +
@@ -96,4 +115,4 @@ function content (contentPath, safeLoad) {
   return api
 }
 
-module.exports = content
+module.exports = yaml

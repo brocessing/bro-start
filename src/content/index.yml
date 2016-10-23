@@ -9,4 +9,5 @@ description: Test for bro-start
 message: |
   Multiline test.
   Is this working?
-  I hope so!
+  I hope so! ..
+  Are you sure ?

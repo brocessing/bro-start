@@ -4,6 +4,9 @@ const merge = require('webpack-merge')
 const webpack = require('webpack')
 
 const devConfig = {
+  entry: [
+    'webpack-hot-middleware/client'
+  ],
   output: {
     path: paths.src
   },
