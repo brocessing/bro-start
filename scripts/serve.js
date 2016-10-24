@@ -12,7 +12,7 @@ const serverConfig = require('../config/devserver.config.js')
 const paths = require('../config/paths.config.js')
 const pjson = require('../package.json')
 const tunnelDomain = pjson.name.replace(/[^0-9a-z]/gi, '').substring(0, 20)
-const utils = require('./utils/misc')
+const store = require('./utils/store')
 let isInit = false
 
 sh.step(1, 2, 'Running the webpack compiler...\n')
@@ -23,7 +23,7 @@ const devMiddleware = webpackDevMiddleware(compiler, {
   stats: {
     colors: true,
     hash: false,
-    timings: true,
+    timings: false,
     chunks: false,
     chunkModules: false,
     modules: false
@@ -35,8 +35,8 @@ const bsMiddlewares = (serverConfig.historyAPIFallback)
   : defaultMiddlewares
 
 compiler.plugin('done', () => {
-  // store hash into utils to reuse it like a global variable
-  utils.hash = compiler.records.hash
+  // store hash to reuse it like a global variable
+  store.hash = compiler.records.hash
   // init the browserSync server once a first build is ready
   if (!isInit) process.nextTick(init)
 })
@@ -46,15 +46,15 @@ function init () {
   sh.log().step(2, 2, 'Starting the browser-sync server...\n')
   browserSync.init({
     server: {
-      baseDir: paths.src
+      baseDir: paths.static
     },
     open: false,
     reloadOnRestart: true,
     notify: false,
     offline: serverConfig.offline || false,
     port: serverConfig.port || 3000,
-    xip: serverConfig.xip,
-    tunnel: serverConfig.tunnel ? tunnelDomain : false,
+    xip: !serverConfig.offline ? serverConfig.xip : false,
+    tunnel: !serverConfig.offline && serverConfig.tunnel ? tunnelDomain : false,
     minify: false,
     middleware: bsMiddlewares,
     files: [

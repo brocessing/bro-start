@@ -1,6 +1,6 @@
 <br>
 <p align="center">
-  <img src="static/brostart.gif" width="125" alt="Chevalvert">
+  <img src="static/brostart.gif" width="125" alt="brostart">
 </p>
 <h1 align="center">bro-start</h1>
 <h3 align="center">Blazing fast webpack setup for static websites</h3>
@@ -22,9 +22,9 @@ Webpack is a nice, easily customizable module bundler.<br>
 It pairs nice with modern javascript frameworks like Vue or React but it's a hassle when it comes to compile some good old html files. :older_man:
 _Bro-start_ combines for you the coolest webpack features with a simple static site generator with yaml and handlebars.
 
-<br><br>
+<br>
 <h1></h1>
-<br><br>
+<br>
 
 ### :santa:  I want my bro-start setup!
 
@@ -37,23 +37,23 @@ yarn install
 
 You can also [download the latest release](https://github.com/brocessing/bro-start/releases)
 
-<br><br>
+<br>
 <h1></h1>
-<br><br>
+<br>
 
 ### :handbag:  Features
-_TODO_
 
-<br><br>
+- Static rendering from yaml files and handlebars templates
+- Easy routing : by default hierarchy of your yaml files are the routes of your sites
+- PostCSS + Stylus + Autoprefixer
+- ES6 transpilation with babel + ES2015 presets
+- Webpack dev server and hot reloading
+- BrowserSync and its features (localtunnel, xip.io, ...)
+- Hash from webpack is available as data in your layouts
+
+<br>
 <h1></h1>
-<br><br>
-
-### :mortar_board:  Usage
-_TODO_
-
-<br><br>
-<h1></h1>
-<br><br>
+<br>
 
 ### :hammer:  License
 MIT.

@@ -5,10 +5,10 @@ const url = require('url')
 const paths = require('../../config/paths.config.js')
 const templatingConfig = require('../../config/templating.config.js')
 
-const utils = require('../utils/misc')
-const cache = require('../utils/cache')
-const yamlSystem = require('../utils/yaml')
-const layouts = require('../utils/layouts')
+const store = require('./store')
+const cache = require('./cache')
+const yamlSystem = require('./yaml')
+const layouts = require('./layouts')
 const yaml = yamlSystem(paths.content, templatingConfig.yamlSafeload)
 
 let contents = null
@@ -23,7 +23,7 @@ function gracefulError (res, err) {
 function processTemplate (content, middleware) {
   // set compiler data for use inside layouts
   content.data.compiler = {
-    hash: utils.hash,
+    hash: store.hash,
     isProduction: false
   }
 

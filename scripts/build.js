@@ -7,6 +7,7 @@ const webpackConfig = require('../config/webpack.config.prod.js')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const compiler = webpack(webpackConfig)
 
+const store = require('./utils/store')
 const buildUtils = require('./utils/build')
 
 compiler.apply(new ProgressBarPlugin({
@@ -25,6 +26,7 @@ buildUtils.cleanupDist(paths.dist)
   .catch((err) => {
     sh.error('💀  Error during the webpack compilation').error(err).exit(0)
   })
+  .then((stats) => { store.hash = stats.hash })
   .then(() => { sh.step(3, 3, 'Rendering the static content...') })
   .then(() => buildUtils.staticRender(compiler))
   .catch((err) => {

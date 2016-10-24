@@ -2,12 +2,10 @@
 layout: index
 
 # Metadatas
-title: My website
-description: Test for bro-start
+title: bro-start
+description: your starterkit is ready!
 
 # Content
 message: |
-  Multiline test.
-  Is this working?
-  I hope so! ..
-  Are you sure ?
+  bro-start is working!
+  have fun.

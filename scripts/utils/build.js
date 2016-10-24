@@ -1,9 +1,51 @@
 const fs = require('fs-extra')
 const path = require('path')
 
-const build = {
-  staticRender (compiler) {
+const paths = require('../../config/paths.config.js')
+const templatingConfig = require('../../config/templating.config.js')
+const store = require('./store')
+const yamlSystem = require('./yaml')
+const layouts = require('./layouts')
+const yaml = yamlSystem(paths.content, templatingConfig.yamlSafeload)
 
+const build = {
+  writeFile (filePath, data) {
+    return new Promise((resolve, reject) => {
+      fs.outputFile(filePath, data, (err) => {
+        if (err) return reject()
+        resolve()
+      })
+    })
+  },
+  writeContent (content) {
+    content.data.compiler = {
+      hash: store.hash,
+      isProduction: true
+    }
+    return new Promise((resolve, reject) => {
+      const layoutPath = path.join(paths.layouts, content.layout + '.hbs')
+      layouts.load(layoutPath)
+        .then((layout) => {
+          const data = layout.render(content.data)
+          build.writeFile(path.join(paths.dist, content.route), data)
+            .then(resolve).catch(reject)
+        })
+        .catch(reject)
+    })
+  },
+  staticRender (compiler) {
+    return new Promise((resolve, reject) => {
+      yaml.loadAll()
+        .then((contents) => {
+          let p = []
+          for (let k in contents) {
+            const promise = build.writeContent(contents[k])
+            p.push(promise)
+          }
+          Promise.all(p).then(resolve).catch(reject)
+        })
+        .catch(reject)
+    })
   },
   webpackCompile (compiler) {
     return new Promise((resolve, reject) => {
@@ -19,17 +61,17 @@ const build = {
     })
   },
   cleanupDist (distPath) {
-    let promises = []
-    const reg = /^(bundle|hash)[-abcdef0-9]+\.(js|css)$/
     return new Promise((resolve, reject) => {
       fs.access(distPath, fs.F_OK, (err) => {
         if (err) resolve()
-        fs.readdir(distPath, (err, files) => {
-          if (err) return reject(err)
-          files.filter(e => e.match(reg))
-            .forEach(e => promises.push(build.removeFile(path.join(distPath, e))))
-          Promise.all(promises).then(resolve).catch(reject)
-        })
+        build.removeFile(distPath)
+          .then(() => {
+            fs.mkdirp(distPath, (err) => {
+              if (err) reject(err)
+              resolve()
+            })
+          })
+          .catch(reject)
       })
     })
   }

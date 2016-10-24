@@ -1,6 +1,6 @@
 let _hash
 
-const utils = {
+const store = {
   set hash (value) {
     _hash = value
   },
@@ -9,4 +9,4 @@ const utils = {
   }
 }
 
-module.exports = utils
+module.exports = store
