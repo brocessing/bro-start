@@ -35,7 +35,7 @@ yarn install
 # Yarn is FAST ! But npm install will do the job as well.
 ```
 
-You can also [download the latest release](https://github.com/brocessing/bro-start/releases)
+You can also [download the latest release](https://github.com/brocessing/bro-start/releases/latest)
 
 <br>
 <h1></h1>
