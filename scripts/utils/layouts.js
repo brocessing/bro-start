@@ -1,8 +1,22 @@
+const path = require('path')
 const fs = require('fs-extra')
+const loadFiles = require('./loadFiles')
 const handlebars = require('handlebars')
-const { handlebarsHelpers } = require('../../config/templating.config.js')
-for (let k in handlebarsHelpers) {
-  handlebars.registerHelper(k, handlebarsHelpers[k])
+const templatingConfig = require('../../config/templating.config.js')
+templatingConfig.beforeHandlebarsUse(handlebars)
+
+const partials = {}
+
+function reloadPartial (layoutsPath, filePath) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) return reject(err)
+      const partialName = path.relative(layoutsPath, filePath)
+      partials[partialName] = { path: filePath }
+      handlebars.registerPartial(partialName, data)
+      resolve()
+    })
+  })
 }
 
 const layouts = {
@@ -19,6 +33,19 @@ const layouts = {
         resolve(layout)
       })
     })
+  },
+  reloadPartials (layoutsPath) {
+    if (Object.keys(partials).length < 1) {
+      return loadFiles(layoutsPath,
+        filePath => path.extname(filePath) === '.hbs',
+        filePath => reloadPartial(layoutsPath, filePath))
+    } else {
+      let p = []
+      for (let k in partials) {
+        p.push(reloadPartial(layoutsPath, partials[k].path))
+      }
+      return Promise.all(p)
+    }
   }
 }
 

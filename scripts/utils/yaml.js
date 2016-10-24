@@ -4,6 +4,11 @@ const _yaml = require('js-yaml')
 
 const util = require('util')
 const cache = require('./cache')
+const loadFiles = require('./loadFiles')
+
+function matchYaml (filePath) {
+  return path.extname(filePath) === '.yml'
+}
 
 function yaml (contentPath, safeLoad) {
   const api = {
@@ -13,58 +18,29 @@ function yaml (contentPath, safeLoad) {
 
   function loadPath (filePath) {
     return new Promise((resolve, reject) => {
-      processPath(filePath)
-        .then((arr) => { arr[0] ? resolve(arr[0]) : reject() })
-        .catch(reject)
+      fs.stat(filePath, (err, stats) => {
+        if (err) return reject(err)
+        if (!stats.isFile() || !matchYaml(filePath)) {
+          return reject(`💀  Error with a YAML file\n` +
+              `↳  File: ${filePath}\n` +
+              `↳  Error: Not a valid YAML file`)
+        }
+        processFile(filePath, stats)
+          .then((arr) => { arr[0] ? resolve(arr[0]) : reject() })
+          .catch(reject)
+      })
     })
   }
 
   function loadAll () {
     return new Promise((resolve, reject) => {
-      loadDir(contentPath)
+      loadFiles(contentPath, matchYaml, processFile)
         .then((arr) => {
           let contents = {}
           arr.forEach((content) => { contents['/' + content.route] = content })
           resolve(contents)
         })
         .catch(reject)
-    })
-  }
-
-  function loadDir (dirPath) {
-    let p = []
-    let processFiles = []
-    return new Promise((resolve, reject) => {
-      fs.readdir(dirPath, (err, files) => {
-        if (err) return reject(err)
-        files.forEach((file) => {
-          const filePath = path.join(dirPath, file)
-          const promise = processPath(filePath)
-          p.push(promise)
-          promise.then((res) => {
-            if (res) processFiles = processFiles.concat(res)
-          })
-        })
-        Promise.all(p)
-          .then(() => resolve(processFiles))
-          .catch(reject)
-      })
-    })
-  }
-
-  function processPath (filePath) {
-    return new Promise((resolve, reject) => {
-      fs.stat(filePath, (err, stats) => {
-        if (err) {
-          return reject(err)
-        } else if (stats.isDirectory()) {
-          return loadDir(filePath).then(resolve).catch(reject)
-        } else if (stats.isFile() && path.extname(filePath) === '.yml') {
-          return processFile(filePath, stats).then(resolve).catch(reject)
-        } else {
-          return resolve()
-        }
-      })
     })
   }
 

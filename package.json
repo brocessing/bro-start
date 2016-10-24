@@ -1,6 +1,6 @@
 {
   "name": "bro-start",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Blazing fast webpack setup for static websites",
   "private": true,
   "scripts": {

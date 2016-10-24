@@ -6,5 +6,6 @@ module.exports = {
   dist: path.join(__dirname, '..', 'dist'),
   static: path.join(__dirname, '..', 'static'),
   content: path.join(__dirname, '..', 'src', 'content'),
-  layouts: path.join(__dirname, '..', 'src', 'layouts')
+  layouts: path.join(__dirname, '..', 'src', 'layouts'),
+  partials: path.join(__dirname, '..', 'src', 'layouts')
 }

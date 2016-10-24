@@ -23,7 +23,7 @@ const build = {
       isProduction: true
     }
     return new Promise((resolve, reject) => {
-      const layoutPath = path.join(paths.layouts, content.layout + '.hbs')
+      const layoutPath = path.join(paths.layouts, content.layout)
       layouts.load(layoutPath)
         .then((layout) => {
           const data = layout.render(content.data)
@@ -33,7 +33,7 @@ const build = {
         .catch(reject)
     })
   },
-  staticRender (compiler) {
+  loadYamlAndCompile () {
     return new Promise((resolve, reject) => {
       yaml.loadAll()
         .then((contents) => {
@@ -46,6 +46,14 @@ const build = {
         })
         .catch(reject)
     })
+  },
+  staticRender (compiler) {
+    if (templatingConfig.autoPartials) {
+      return layouts.reloadPartials(paths.partials)
+        .then(build.loadYamlAndCompile)
+    } else {
+      return build.loadYamlAndCompile()
+    }
   },
   webpackCompile (compiler) {
     return new Promise((resolve, reject) => {

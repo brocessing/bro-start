@@ -16,19 +16,30 @@ let contents = null
 // gracefulError display error both on the browser and the console,
 // to avoid breaking the auto-reload of browser-sync
 function gracefulError (res, err) {
-  res.end(`<html><head></head><body><pre style="font-size:10px;color:red">${err}</pre></body></html>`)
+  res.setHeader('Content-Type', 'text/html; charset=utf-8')
+  res.end(`<html><head></head><body>` +
+    `<p style="white-space:pre-wrap;word-wrap:break-word;` +
+    `font-family:monospace;font-size:18px;color:red">${err}</p></body></html>`)
   sh.error(err)
 }
 
 function processTemplate (content, middleware) {
-  // set compiler data for use inside layouts
-  content.data.compiler = {
-    hash: store.hash,
-    isProduction: false
-  }
+  // auto-partials reloading
+  if (templatingConfig.autoPartials) {
+    layouts.reloadPartials(paths.partials)
+      .then(() => { next() })
+      .catch((err) => gracefulError(middleware.res, err))
+  } else { next() }
 
-  const layoutPath = path.join(paths.layouts, content.layout + '.hbs')
-  layouts.load(layoutPath)
+  function next () {
+    // set compiler data for use inside layouts
+    content.data.compiler = {
+      hash: store.hash,
+      isProduction: false
+    }
+
+    const layoutPath = path.join(paths.layouts, content.layout)
+    layouts.load(layoutPath)
     .then((layout) => {
       middleware.res.setHeader('Content-Type', 'text/html')
       middleware.res.end(layout.render(content.data))
@@ -39,6 +50,7 @@ function processTemplate (content, middleware) {
           `↳  YAML: ${content.path}\n` +
           `↳  Error: ${err}`)
     })
+  }
 }
 
 function templateMiddleware (req, res, next) {

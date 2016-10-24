@@ -45,11 +45,13 @@ You can also [download the latest release](https://github.com/brocessing/bro-sta
 
 - Static rendering from yaml files and handlebars templates
 - Easy routing : by default hierarchy of your yaml files are the routes of your sites
+- _autoPartials_ option to register all your partials automatically before any rendering
 - PostCSS + Stylus + Autoprefixer
 - ES6 transpilation with babel + ES2015 presets
 - Webpack dev server and hot reloading
 - BrowserSync and its features (localtunnel, xip.io, ...)
 - Hash from webpack is available as data in your layouts
+- Easily configurable with multiple config files for each parts of the starter kit
 
 <br>
 <h1></h1>

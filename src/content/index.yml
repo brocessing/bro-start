@@ -1,5 +1,5 @@
 # Template compiler infos
-layout: index
+layout: index.hbs
 
 # Metadatas
 title: bro-start
