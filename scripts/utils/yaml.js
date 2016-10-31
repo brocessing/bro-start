@@ -46,27 +46,44 @@ function yaml (contentPath, safeLoad) {
 
   function processFile (filePath, stats) {
     return new Promise((resolve, reject) => {
-      let file = {}
+      let files = []
       cache.set(filePath, new Date(util.inspect(stats.mtime)))
-      file.path = filePath
       loadFile(filePath)
         .then((data) => {
-          if (!data.layout) {
-            return reject(`💀  Error with a YAML file\n` +
-              `↳  File: ${filePath}\n` +
-              `↳  Error: Missing the layout property`)
-          }
-          file.layout = data.layout
-          delete data.layout
-          if (!data.route) {
-            file.route = path.relative(contentPath, filePath)
-              .slice(0, -4) + '.html'
+          if (data.routes) {
+            if (data.layout) delete data.layout
+            if (data.route) delete data.route
+            const routes = Object.assign({}, data.routes)
+            delete data.routes
+            for (let route in routes) {
+              let file = {}
+              file.path = filePath
+              file.route = route
+              file.layout = routes[route]
+              file.data = data
+              files.push(file)
+            }
           } else {
-            file.route = data.route
-            delete data.route
+            let file = {}
+            if (!data.layout) {
+              return reject(`💀  Error with a YAML file\n` +
+                `↳  File: ${filePath}\n` +
+                `↳  Error: Missing the layout property`)
+            }
+            file.path = filePath
+            file.layout = data.layout
+            delete data.layout
+            if (data.route) {
+              file.route = data.route
+              delete data.route
+            } else {
+              file.route = path.relative(contentPath, filePath)
+                .slice(0, -4) + '.html'
+            }
+            file.data = data
+            files.push(file)
           }
-          file.data = data
-          resolve([file])
+          resolve(files)
         })
         .catch(reject)
     })

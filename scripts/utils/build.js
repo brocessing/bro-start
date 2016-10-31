@@ -2,11 +2,11 @@ const fs = require('fs-extra')
 const path = require('path')
 
 const paths = require('../../config/paths.config.js')
-const templatingConfig = require('../../config/templating.config.js')
+const brostart = require('../../config/brostart.config.js')
 const store = require('./store')
 const yamlSystem = require('./yaml')
 const layouts = require('./layouts')
-const yaml = yamlSystem(paths.content, templatingConfig.yamlSafeload)
+const yaml = yamlSystem(paths.content, brostart.templating.yamlSafeload)
 
 const build = {
   writeFile (filePath, data) {
@@ -20,6 +20,7 @@ const build = {
   writeContent (content) {
     content.data.compiler = {
       hash: store.hash,
+      publicPath: paths.public,
       isProduction: true
     }
     return new Promise((resolve, reject) => {
@@ -48,7 +49,7 @@ const build = {
     })
   },
   staticRender (compiler) {
-    if (templatingConfig.autoPartials) {
+    if (brostart.templating.autoPartials) {
       return layouts.reloadPartials(paths.partials)
         .then(build.loadYamlAndCompile)
     } else {

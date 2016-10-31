@@ -8,7 +8,7 @@ module.exports = {
     path.join(paths.src, 'app.styl')
   ],
   output: {
-    publicPath: '/',
+    publicPath: paths.public,
     filename: 'bundle-[hash].js',
     chunkFilename: 'chunk-[id]-[hash].js'
   },

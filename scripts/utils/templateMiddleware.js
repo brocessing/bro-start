@@ -1,15 +1,16 @@
+const mime = require('mime-types')
 const sh = require('kool-shell')
 const path = require('path')
 const url = require('url')
 
 const paths = require('../../config/paths.config.js')
-const templatingConfig = require('../../config/templating.config.js')
+const brostart = require('../../config/brostart.config.js')
 
 const store = require('./store')
 const cache = require('./cache')
 const yamlSystem = require('./yaml')
 const layouts = require('./layouts')
-const yaml = yamlSystem(paths.content, templatingConfig.yamlSafeload)
+const yaml = yamlSystem(paths.content, brostart.templating.yamlSafeload)
 
 let contents = null
 
@@ -25,7 +26,7 @@ function gracefulError (res, err) {
 
 function processTemplate (content, middleware) {
   // auto-partials reloading
-  if (templatingConfig.autoPartials) {
+  if (brostart.templating.autoPartials) {
     layouts.reloadPartials(paths.partials)
       .then(() => { next() })
       .catch((err) => gracefulError(middleware.res, err))
@@ -35,13 +36,15 @@ function processTemplate (content, middleware) {
     // set compiler data for use inside layouts
     content.data.compiler = {
       hash: store.hash,
+      publicPath: paths.public,
       isProduction: false
     }
 
     const layoutPath = path.join(paths.layouts, content.layout)
     layouts.load(layoutPath)
     .then((layout) => {
-      middleware.res.setHeader('Content-Type', 'text/html')
+      const contentType = mime.contentType(path.extname(content.route))
+      middleware.res.setHeader('Content-Type', contentType)
       middleware.res.end(layout.render(content.data))
     })
     .catch((err) => {

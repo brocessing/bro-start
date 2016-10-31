@@ -7,9 +7,11 @@ const webpackHotMiddleware = require('webpack-hot-middleware')
 const historyApiFallbackMiddleware = require('connect-history-api-fallback')
 const compiler = webpack(webpackConfig)
 
-const browserSync = require('browser-sync').create()
-const serverConfig = require('../config/devserver.config.js')
 const paths = require('../config/paths.config.js')
+const browserSync = require('browser-sync').create()
+const brostart = require('../config/brostart.config.js')
+const devServConf = brostart.devServer
+
 const pjson = require('../package.json')
 const tunnelDomain = pjson.name.replace(/[^0-9a-z]/gi, '').substring(0, 20)
 const store = require('./utils/store')
@@ -19,7 +21,7 @@ sh.step(1, 2, 'Running the webpack compiler...\n')
 const templateMiddleware = require('./utils/templateMiddleware')
 const hotMiddleware = webpackHotMiddleware(compiler)
 const devMiddleware = webpackDevMiddleware(compiler, {
-  contentBase: paths.src,
+  publicPath: paths.public,
   stats: {
     colors: true,
     hash: false,
@@ -30,7 +32,7 @@ const devMiddleware = webpackDevMiddleware(compiler, {
   }
 })
 const defaultMiddlewares = [templateMiddleware, devMiddleware, hotMiddleware]
-const bsMiddlewares = (serverConfig.historyAPIFallback)
+const bsMiddlewares = (devServConf.historyAPIFallback)
   ? [historyApiFallbackMiddleware()].concat(defaultMiddlewares)
   : defaultMiddlewares
 
@@ -45,16 +47,14 @@ function init () {
   isInit = true
   sh.log().step(2, 2, 'Starting the browser-sync server...\n')
   browserSync.init({
-    server: {
-      baseDir: paths.static
-    },
+    server: { baseDir: paths.static },
     open: false,
     reloadOnRestart: true,
     notify: false,
-    offline: serverConfig.offline || false,
-    port: serverConfig.port || 3000,
-    xip: !serverConfig.offline ? serverConfig.xip : false,
-    tunnel: !serverConfig.offline && serverConfig.tunnel ? tunnelDomain : false,
+    offline: devServConf.offline || false,
+    port: devServConf.port || 3000,
+    xip: !devServConf.offline ? devServConf.xip : false,
+    tunnel: !devServConf.offline && devServConf.tunnel ? tunnelDomain : false,
     minify: false,
     middleware: bsMiddlewares,
     files: [

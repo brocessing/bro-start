@@ -2,8 +2,8 @@ const path = require('path')
 const fs = require('fs-extra')
 const loadFiles = require('./loadFiles')
 const handlebars = require('handlebars')
-const templatingConfig = require('../../config/templating.config.js')
-templatingConfig.beforeHandlebarsUse(handlebars)
+const brostart = require('../../config/brostart.config.js')
+brostart.lifecycle.onHandlebarsInit(handlebars)
 
 const partials = {}
 
@@ -28,6 +28,7 @@ const layouts = {
         if (err) return reject(err)
         const template = handlebars.compile(data)
         layout.render = function (content) {
+          brostart.lifecycle.beforeHandlebarsRender(content)
           return template(content)
         }
         resolve(layout)
