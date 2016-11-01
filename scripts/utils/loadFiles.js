@@ -25,11 +25,13 @@ function loadFiles (entryPath, match = true, transform = Promise.resolve) {
       if (err) return reject(err)
       files.forEach((file) => {
         const filePath = path.join(entryPath, file)
-        const promise = processPath(filePath, match, transform)
-        p.push(promise)
-        promise.then((res) => {
-          if (res) processFiles = processFiles.concat(res)
-        })
+        p.push(new Promise((resolve, reject) => {
+          processPath(filePath, match, transform)
+            .then((res) => {
+              if (res) processFiles = processFiles.concat(res)
+              resolve(res)
+            }).catch(reject)
+        }))
       })
       Promise.all(p)
         .then(() => resolve(processFiles))

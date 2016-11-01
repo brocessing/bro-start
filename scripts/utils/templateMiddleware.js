@@ -42,17 +42,17 @@ function processTemplate (content, middleware) {
 
     const layoutPath = path.join(paths.layouts, content.layout)
     layouts.load(layoutPath)
-    .then((layout) => {
-      const contentType = mime.contentType(path.extname(content.route))
-      middleware.res.setHeader('Content-Type', contentType)
-      middleware.res.end(layout.render(content.data))
-    })
-    .catch((err) => {
-      gracefulError(middleware.res,
-        `💀  Error loading the layout ${content.layout}\n` +
-          `↳  YAML: ${content.path}\n` +
-          `↳  Error: ${err}`)
-    })
+      .then((layout) => {
+        const contentType = mime.contentType(path.extname(content.route))
+        middleware.res.setHeader('Content-Type', contentType)
+        middleware.res.end(layout.render(content.data))
+      })
+      .catch((err) => {
+        gracefulError(middleware.res,
+          `💀  Error loading the layout ${content.layout}\n` +
+            `↳  YAML: ${content.path}\n` +
+            `↳  Error: ${err}`)
+      })
   }
 }
 
@@ -64,12 +64,12 @@ function templateMiddleware (req, res, next) {
   // if no content is loaded, we preload all the yaml
   if (!contents) {
     yaml.loadAll()
-    .then((data) => {
-      contents = data
-      // if the current url match an existing route
-      if (contents[fileUrl]) processTemplate(contents[fileUrl], {req, res, next})
-    })
-    .catch((err) => { gracefulError(res, err) })
+      .then((data) => {
+        contents = data
+        // if the current url match an existing route
+        if (contents[fileUrl]) processTemplate(contents[fileUrl], {req, res, next})
+      })
+      .catch((err) => { gracefulError(res, err) })
 
   // if the current requested url match an existing route
   } else if (contents[fileUrl]) {

@@ -1,11 +1,13 @@
-# Template compiler infos
+# the layout file to load with this yaml
 layout: index.hbs
 
-# Metadatas
+# By default, the outputfile route will be
+# the relative position of the yaml inside the content folder
+# But you can customize the route like this:
+# route: customFolder/customPage.html
+
 title: bro-start
 description: your starterkit is ready!
-
-# Content
 message: |
   bro-start is working!
   have fun.
