@@ -50,6 +50,7 @@ function yaml (contentPath, safeLoad) {
       cache.set(filePath, new Date(util.inspect(stats.mtime)))
       loadFile(filePath)
         .then((data = {}) => {
+          // multi-route from single yaml file. this is still experimental.
           if (data.routes) {
             if (data.layout) delete data.layout
             if (data.route) delete data.route
@@ -61,6 +62,7 @@ function yaml (contentPath, safeLoad) {
               file.route = route
               file.layout = routes[route]
               file.data = data
+              file.data.layout = file.layout
               files.push(file)
             }
           } else {
@@ -72,7 +74,7 @@ function yaml (contentPath, safeLoad) {
             }
             file.path = filePath
             file.layout = data.layout
-            delete data.layout
+            // delete data.layout
             if (data.route) {
               file.route = data.route
               delete data.route
