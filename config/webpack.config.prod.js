@@ -1,15 +1,52 @@
-const paths = require('./paths.config')
-const baseConfig = require('./webpack.config.base.js')
-const merge = require('webpack-merge')
+const path = require('path')
 const webpack = require('webpack')
+const merge = require('webpack-merge')
+const paths = require('./paths.config')
+const commonConfig = require('./webpack.config.common')
+
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const prodConfig = {
   output: {
-    path: paths.dist
+    path: paths.build
+  },
+  module: {
+    rules: [
+      {
+        test: /\.styl$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: { url: false }
+            },
+            {
+              loader: 'postcss-loader',
+              options: { config: path.resolve(__dirname, 'postcss.config.js') }
+            },
+            'stylus-loader'
+          ]
+        })
+      },
+      {
+        test: /\.js$/,
+        use: 'strip-loader?strip[]=devOnly'
+      }
+    ]
   },
   plugins: [
+    // Copy static files
+    new CopyWebpackPlugin(
+      [{ from: paths.static, to: paths.build }],
+      { ignore: ['.DS_Store', '.gitkeep'] }
+    ),
+
+    // Extract all css into one file
+    new ExtractTextPlugin({ filename: '[hash].css', allChunks: true }),
+
+    // Minification and size optimization
     new webpack.DefinePlugin({ 'process.env': { 'NODE_ENV': '"production"' } }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
@@ -17,30 +54,9 @@ const prodConfig = {
       output: { comments: false },
       mangle: { screw_ie8: true }
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new CopyWebpackPlugin(
-      [{
-        from: paths.static,
-        to: paths.dist
-      }],
-      {
-        ignore: ['.DS_Store', '.gitkeep']
-      }
-    ),
-    new ExtractTextPlugin('bundle-[hash].css', { allChunks: true })
+    new webpack.optimize.OccurrenceOrderPlugin()
   ],
-  module: {
-    loaders: [
-      {
-        test: /\.styl$/,
-        loader: ExtractTextPlugin.extract('style', 'css?-url!postcss!stylus'),
-        include: paths.src,
-        exclude: /node_modules/
-      }
-    ]
-  },
-  devtool: '',
-  debug: false
+  devtool: ''
 }
 
-module.exports = merge(baseConfig, prodConfig)
+module.exports = merge(commonConfig, prodConfig)

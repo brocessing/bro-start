@@ -19,7 +19,7 @@ const sh = require('kool-shell')()
   .use(require('kool-shell/plugins/exit'))
 
 let isInit = false
-sh.log()
+
 sh.step(1, 2, 'Running the webpack compiler...')
 const hotMiddleware = webpackHotMiddleware(compiler)
 const devMiddleware = webpackDevMiddleware(compiler, {
@@ -34,14 +34,11 @@ const devMiddleware = webpackDevMiddleware(compiler, {
   }
 })
 
-const defaultMiddlewares = [
+const middlewares = [
   templateMiddleware,
   devMiddleware,
   hotMiddleware
 ]
-
-const middlewares = devServConf.firstMiddlewares
-  .concat(defaultMiddlewares, devServConf.lastMiddlewares)
 
 compiler.plugin('done', () => {
   // store hash to reuse it like a global variable
@@ -55,7 +52,6 @@ compiler.plugin('done', () => {
 
 function init () {
   isInit = true
-  sh.log()
   sh.step(2, 2, 'Starting the browser-sync server...')
   bs.init({
     server: { baseDir: paths.static },

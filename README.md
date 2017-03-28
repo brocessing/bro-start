@@ -43,18 +43,18 @@ You can also [download the latest release](https://github.com/brocessing/bro-sta
 
 ### :handbag:  Features
 
-- Static rendering from yaml files and handlebars templates
-- Easy routing : by default hierarchy of your yaml files are the routes of your sites
-- Multifiles rendering / Multirouting from a single yaml file
-- Easily configurable with multiple config files for each parts of the starter kit
-- Lifecycle hooks to execute code at certain steps
-- _autoPartials_ option to register all your partials automatically before any rendering
+- Webpack 2
 - PostCSS + Stylus + Autoprefixer
 - ES6 transpilation with babel + ES2015 presets
 - Webpack Dev Server and Hot Reloading
+- Static rendering from handlebars templates
+- Easily configurable with multiple config files for each parts of the starter kit
+- _autoPartials_ option to register all your handlebars partials automatically before any rendering
 - BrowserSync and its features (localtunnel, xip.io, ...)
+- PHP middleware using the built-in server of php cli
 - Hash, publicPath from webpack is available as data in your layouts
-- `deploy` npm script to push the dist folder contents on a gh-pages branch
+- `deploy` script to push the build on a gh-pages branch, using `ghp`
+- Basic tests with `snazzy` and `dependency-check`
 
 
 <br>

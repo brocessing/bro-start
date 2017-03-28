@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 
 function processPath (filePath, match, transform) {
@@ -7,7 +7,7 @@ function processPath (filePath, match, transform) {
       if (err) {
         return reject(err)
       } else if (stats.isDirectory()) {
-        return loadFiles(filePath, match, transform).then(resolve).catch(reject)
+        return processFiles(filePath, match, transform).then(resolve).catch(reject)
       } else if (stats.isFile() && match(filePath, stats)) {
         return transform(filePath, stats).then(resolve).catch(reject)
       } else {
@@ -17,9 +17,9 @@ function processPath (filePath, match, transform) {
   })
 }
 
-function loadFiles (entryPath, match = true, transform = Promise.resolve) {
+function processFiles (entryPath, match = true, transform = Promise.resolve) {
   let p = []
-  let processFiles = []
+  let selectedFiles = []
   return new Promise((resolve, reject) => {
     fs.readdir(entryPath, (err, files) => {
       if (err) return reject(err)
@@ -28,16 +28,16 @@ function loadFiles (entryPath, match = true, transform = Promise.resolve) {
         p.push(new Promise((resolve, reject) => {
           processPath(filePath, match, transform)
             .then((res) => {
-              if (res) processFiles = processFiles.concat(res)
+              if (res) selectedFiles = selectedFiles.concat(res)
               resolve(res)
             }).catch(reject)
         }))
       })
       Promise.all(p)
-        .then(() => resolve(processFiles))
+        .then(() => resolve(selectedFiles))
         .catch(reject)
     })
   })
 }
 
-module.exports = loadFiles
+module.exports = processFiles

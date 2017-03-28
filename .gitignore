@@ -1,6 +1,8 @@
 ### App ###
-dist
-dist/**/*
+build
+
+### Editor ###
+.vscode
 
 ### Node ###
 .tmp

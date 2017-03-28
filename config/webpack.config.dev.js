@@ -1,7 +1,8 @@
-const paths = require('./paths.config')
-const baseConfig = require('./webpack.config.base.js')
+const path = require('path')
 const merge = require('webpack-merge')
 const webpack = require('webpack')
+const paths = require('./paths.config')
+const commonConfig = require('./webpack.config.common')
 
 const devConfig = {
   entry: [
@@ -12,20 +13,29 @@ const devConfig = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin()
   ],
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.styl$/,
-        loader: 'style!css?-url!postcss!stylus',
-        include: paths.src,
-        exclude: /node_modules/
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: { url: false }
+          },
+          {
+            loader: 'postcss-loader',
+            options: { config: path.resolve(__dirname, 'postcss.config.js') }
+          },
+          'stylus-loader'
+        ],
+        include: paths.src
       }
     ]
   },
-  devtool: '#eval-source-map',
-  debug: true
+  devtool: '#eval-source-map'
 }
 
-module.exports = merge(baseConfig, devConfig)
+module.exports = merge(commonConfig, devConfig)
