@@ -54,7 +54,7 @@ You can also [download the latest release](https://github.com/brocessing/bro-sta
 - PHP middleware using the built-in server of php cli
 - Hash, publicPath from webpack is available as data in your layouts
 - `deploy` script to push the build on a gh-pages branch, using `ghp`
-- Basic tests with `snazzy` and `dependency-check`
+- Linting with `snazzy` and `standard`
 
 
 <br>
