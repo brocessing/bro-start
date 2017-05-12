@@ -20,7 +20,7 @@
 
 Webpack is a nice, easily customizable module bundler.<br>
 It pairs nice with modern javascript frameworks like Vue or React but it's a hassle when it comes to compile some good old html files. :older_man:
-_Bro-start_ combines for you the coolest webpack features with a simple static site generator with yaml and handlebars.
+_Bro-start_ combines for you the coolest webpack features with a simple static file generator.
 
 <br>
 <h1></h1>
