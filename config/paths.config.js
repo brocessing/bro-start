@@ -1,9 +1,16 @@
 const path = require('path')
-const isProduction = (process.env.NODE_ENV === 'production')
+const appEnv = process.env.APP_ENV || process.env.NODE_ENV || 'development'
+
+let publicPaths = {
+  development: '/',
+  ghpages: '/repository/',
+  preprod: '/',
+  production: '/'
+}
 
 module.exports = {
   // Used by the devServer and base href
-  public: isProduction ? './' : '/',
+  public: publicPaths[appEnv] || publicPaths.development,
 
   // Used by the module bundler
   root: path.join(__dirname, '..'),

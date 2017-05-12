@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development node scripts/serve.js",
     "build": "cross-env NODE_ENV=production node scripts/build.js",
-    "deploy": "npm run build && ghp build",
+    "build-preprod": "cross-env APP_ENV=preprod npm run build",
+    "deploy": "cross-env APP_ENV=ghpages npm run build && ghp build",
     "lint": "snazzy",
     "test": "npm run lint"
   },
