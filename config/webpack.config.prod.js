@@ -41,10 +41,6 @@ const prodConfig = {
             }
           ]
         })
-      },
-      {
-        test: /\.js$/,
-        use: 'strip-loader?strip[]=devOnly'
       }
     ]
   },

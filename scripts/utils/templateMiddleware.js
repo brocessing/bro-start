@@ -4,9 +4,10 @@ const url = require('url')
 const paths = require('../../config/paths.config.js')
 const templatingConf = require('../../config/templating.config')
 const renderPage = require('./renderPage')
-const pages = require(path.join(paths.src, 'pages'))
 const sh = require('kool-shell')()
   .use(require('kool-shell/plugins/log'))
+
+let pages
 
 // gracefulError display error both on the browser and the console,
 // to avoid breaking the auto-reload of browser-sync
@@ -38,6 +39,9 @@ function processTemplate (page, middleware) {
 }
 
 function templateMiddleware (req, res, next) {
+  delete require.cache[require.resolve(path.join(paths.src, 'pages'))]
+  pages = require(path.join(paths.src, 'pages'))
+
   // parse url - append index.html to / if needed
   let fileUrl = url.parse(req.url).pathname
   if (fileUrl.slice(-1) === '/') fileUrl += 'index.html'

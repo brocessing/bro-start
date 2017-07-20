@@ -1,8 +1,11 @@
 ### App ###
 build
 
-### Editor ###
+### Workflow & Editor ###
 .vscode
+.eslintcache
+.stylelintcache
+stats.json
 
 ### Node ###
 .tmp

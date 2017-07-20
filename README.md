@@ -51,10 +51,9 @@ You can also [download the latest release](https://github.com/brocessing/bro-sta
 - Easily configurable with multiple config files for each parts of the starter kit
 - _autoPartials_ option to register all your handlebars partials automatically before any rendering
 - BrowserSync and its features (localtunnel, xip.io, ...)
-- PHP middleware using the built-in server of php cli
 - Hash, publicPath from webpack is available as data in your layouts
 - `deploy` script to push the build on a gh-pages branch, using `ghp`
-- Linting with `snazzy` and `standard`
+- Linting with ESLint (and Standard plugin) and Stylelint
 
 
 <br>
