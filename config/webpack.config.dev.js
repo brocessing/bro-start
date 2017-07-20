@@ -18,18 +18,34 @@ const devConfig = {
   module: {
     rules: [
       {
-        test: /\.styl$/,
+        test: /\.(scss)$/,
         use: [
-          'style-loader',
+          {
+            loader: 'style-loader',
+            options: {
+              sourceMap: true
+            }
+          },
           {
             loader: 'css-loader',
-            options: { url: false }
+            options: {
+              url: false,
+              sourceMap: true
+            }
           },
           {
             loader: 'postcss-loader',
-            options: { config: path.resolve(__dirname, 'postcss.config.js') }
+            options: {
+              config: { path: path.resolve(__dirname, 'postcss.config.js') },
+              sourceMap: true
+            }
           },
-          'stylus-loader'
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
         ],
         include: paths.src
       }

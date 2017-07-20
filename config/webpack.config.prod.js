@@ -14,19 +14,31 @@ const prodConfig = {
   module: {
     rules: [
       {
-        test: /\.styl$/,
+        test: /\.(scss)$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
             {
               loader: 'css-loader',
-              options: { url: false }
+              options: {
+                url: false,
+                sourceMap: true,
+                minimize: true
+              }
             },
             {
               loader: 'postcss-loader',
-              options: { config: path.resolve(__dirname, 'postcss.config.js') }
+              options: {
+                config: { path: path.resolve(__dirname, 'postcss.config.js') },
+                sourceMap: true
+              }
             },
-            'stylus-loader'
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
+            }
           ]
         })
       },
@@ -48,15 +60,16 @@ const prodConfig = {
 
     // Minification and size optimization
     new webpack.DefinePlugin({ 'process.env': { 'NODE_ENV': '"production"' } }),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: { warnings: false, screw_ie8: true, drop_console: true },
       output: { comments: false },
-      mangle: { screw_ie8: true }
+      mangle: { screw_ie8: true },
+      sourceMap: true
     }),
     new webpack.optimize.OccurrenceOrderPlugin()
   ],
-  devtool: ''
+  devtool: '#source-map',
+  bail: true
 }
 
 module.exports = merge(commonConfig, prodConfig)

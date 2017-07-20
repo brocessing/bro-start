@@ -4,7 +4,7 @@ const paths = require('./paths.config')
 module.exports = {
   entry: [
     path.join(paths.src, 'app.js'),
-    path.join(paths.src, 'app.styl')
+    path.join(paths.src, 'app.scss')
   ],
   output: {
     publicPath: paths.public,
